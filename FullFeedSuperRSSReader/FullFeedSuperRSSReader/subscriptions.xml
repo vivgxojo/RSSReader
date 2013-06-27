@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>vivgxojo subscriptions in Google Reader</title>
+    </head>
+    <body>
+        <outline text="1-2-3 Go!" title="1-2-3 Go!" type="rss"
+            xmlUrl="http://1-2-3go.blogspot.com/feeds/posts/default" htmlUrl="http://1-2-3go.blogspot.com/"/>
+        <outline text="Bizz Et Ses Histoires"
+            title="Bizz Et Ses Histoires" type="rss"
+            xmlUrl="http://bizzetseshistoires.blogspot.com/feeds/posts/default" htmlUrl="http://bizzetseshistoires.blogspot.com/"/>
+        <outline
+            text="Comment mettre du piquant dans sa vie familiale ?"
+            title="Comment mettre du piquant dans sa vie familiale ?"
+            type="rss" xmlUrl="http://lubiesdemaman.wordpress.com/feed/" htmlUrl="http://lubiesdemaman.wordpress.com"/>
+        <outline text="Crowning Glory Quilts"
+            title="Crowning Glory Quilts" type="rss"
+            xmlUrl="http://crowningloryquilts.blogspot.com/feeds/posts/default" htmlUrl="http://crowningloryquilts.blogspot.com/"/>
+        <outline text="CSS Wizardry" title="CSS Wizardry" type="rss"
+            xmlUrl="http://csswizardry.com/feed/" htmlUrl="http://csswizardry.com"/>
+        <outline text="Cyberpresse : acc science"
+            title="Cyberpresse : acc science" type="rss"
+            xmlUrl="http://www.cyberpresse.ca/rss/941.xml" htmlUrl="http://www.lapresse.ca"/>
+        <outline text="Dans la forêt des enfants-roi"
+            title="Dans la forêt des enfants-roi" type="rss"
+            xmlUrl="http://danslaforetdesenfantsroi.blogspot.com/feeds/posts/default" htmlUrl="http://danslaforetdesenfantsroi.blogspot.com/"/>
+        <outline text="des Peccadilles en chroniques"
+            title="des Peccadilles en chroniques" type="rss"
+            xmlUrl="http://despecadilles.com/blog3/feed/" htmlUrl="http://despecadilles.com/blog3"/>
+        <outline text="Grande Dame" title="Grande Dame" type="rss"
+            xmlUrl="http://grande-dame.blogspot.com/feeds/posts/default" htmlUrl="http://grande-dame.blogspot.com/"/>
+        <outline text="http://apprendreenliberte.wordpress.com/feed/"
+            title="http://apprendreenliberte.wordpress.com/feed/"
+            type="rss"
+            xmlUrl="http://apprendreenliberte.wordpress.com/feed/" htmlUrl="http://apprendreenliberte.wordpress.com"/>
+        <outline text="ifeltsweetly" title="ifeltsweetly" type="rss"
+            xmlUrl="http://ifeltsweetly.blogspot.com/feeds/posts/default" htmlUrl="http://www.ifeltsweetly.com/"/>
+        <outline text="Jamais 2 sans 3" title="Jamais 2 sans 3"
+            type="rss"
+            xmlUrl="http://juliebeaupre.com/jamais2sans3/?feed=rss2" htmlUrl="http://juliebeaupre.com/jamais2sans3"/>
+        <outline text="KagZter" title="KagZter" type="rss"
+            xmlUrl="http://kagzterz.blogspot.com/feeds/posts/default" htmlUrl="http://kagzterz.blogspot.com/"/>
+        <outline text="Le ciel est bleu, la mère est calme..."
+            title="Le ciel est bleu, la mère est calme..." type="rss"
+            xmlUrl="http://www.la-mere-est-calme.com/feeds/posts/default" htmlUrl="http://www.la-mere-est-calme.com/"/>
+        <outline text="Les &quot;Stars&quot; Filantes"
+            title="Les &quot;Stars&quot; Filantes" type="rss"
+            xmlUrl="http://lesstarsfilantes.blogspot.com/feeds/posts/default" htmlUrl="http://www.lesstarsfilantes.com/"/>
+        <outline text="Les fils de l'Araignée"
+            title="Les fils de l'Araignée" type="rss"
+            xmlUrl="http://araigneeweb.blogspot.com/feeds/posts/default" htmlUrl="http://araigneeweb.blogspot.com/"/>
+        <outline text="Les (Z)imparfaites" title="Les (Z)imparfaites"
+            type="rss"
+            xmlUrl="http://www.lesimparfaites.com/feeds/posts/default" htmlUrl="http://www.lesimparfaites.com/"/>
+        <outline text="Maman 3.0" title="Maman 3.0" type="rss"
+            xmlUrl="http://www.mamantroispointzero.com/feed/" htmlUrl="http://www.mamantroispointzero.com"/>
+        <outline text="Maman toute croche" title="Maman toute croche"
+            type="rss"
+            xmlUrl="http://mamantoutecroche.blogspot.com/feeds/posts/default" htmlUrl="http://mamantoutecroche.blogspot.com/"/>
+        <outline text="Maman à bord" title="Maman à bord" type="rss"
+            xmlUrl="http://maman-a-bord.blogspot.com/feeds/posts/default" htmlUrl="http://maman-a-bord.blogspot.com/"/>
+        <outline text="Mamanbooh!" title="Mamanbooh!" type="rss"
+            xmlUrl="http://mamanbooh.blogspot.com/feeds/posts/default" htmlUrl="http://mamanbooh.blogspot.com/"/>
+        <outline text="Mange ta soupe" title="Mange ta soupe" type="rss"
+            xmlUrl="http://mange-tasoupe.blogspot.com/feeds/posts/default" htmlUrl="http://mange-tasoupe.blogspot.com/"/>
+        <outline text="Misurlenet" title="Misurlenet" type="rss"
+            xmlUrl="http://www.misurlenet.com/feeds/posts/default" htmlUrl="http://www.misurlenet.com/"/>
+        <outline text="Pensées" title="Pensées" type="rss"
+            xmlUrl="http://gabriellecr.blogspot.com/feeds/posts/default" htmlUrl="http://gabriellecr.blogspot.com/"/>
+        <outline text="Pourquoi ? Parce que... parce que!"
+            title="Pourquoi ? Parce que... parce que!" type="rss"
+            xmlUrl="http://pourquoiparcequeparceque.wordpress.com/feed/" htmlUrl="http://pourquoiparcequeparceque.wordpress.com"/>
+        <outline
+            text="Rien ne se perd, rien ne se crée, tout se transforme"
+            title="Rien ne se perd, rien ne se crée, tout se transforme"
+            type="rss"
+            xmlUrl="http://toutsetransforme.blogspot.com/feeds/posts/default" htmlUrl="http://toutsetransforme.blogspot.com/"/>
+        <outline text="Une maman parmi 3 garçons"
+            title="Une maman parmi 3 garçons" type="rss"
+            xmlUrl="http://moiparmi3garcons.blogspot.com/feeds/posts/default" htmlUrl="http://moiparmi3garcons.blogspot.com/"/>
+    </body>
+</opml>
