@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Javascript</title>
+		<style>
+			table.border tr td, table.border tr th, table.border thead tr th {
+  				border:1px solid black;
+				padding:5px;
+			}
+		</style>
+		<script type="text/javascript">
+			function validate() {
+				var menu = document.getElementById("nombre").options[document.getElementById("nombre").selectedIndex].value;
+				if (menu == "false")
+					alert("Vous devez choisir un nombre.");
+				else {
+					var radio = "Peut-\352tre";
+					if (document.getElementById("oui").checked)
+						radio="Oui";
+					else if	(document.getElementById("non").checked)
+							radio="Non";
+					document.getElementById("menu").value=menu;
+					document.getElementById("radio").value=radio;
+				}
+			}
+		</script>
+	</head>
+	<body style="font-family: Arial, Helvetica, Sans-serif">
+		<form>
+		<table class="border">
+			<tr><th>Menu</th><th>Boutons radio</th></tr>
+			<tr><td><select id="nombre">
+					  <option value="false" disabled selected>-- Choisir un nombre --</option>
+			  		  <option value="Un">Un</option>
+					  <option value="Deux">Deux</option>
+					  <option value="Trois">Trois</option>
+					  <option value="Quatre">Quatre</option>
+			  		  <option value="Cinq">Cinq</option>
+					  <option value="Six">Six</option>
+					  <option value="Sept">Sept</option>
+					  <option value="Huit">Huit</option>
+					  <option value="Neuf">Neuf</option>
+					  <option value="Dix">Dix</option>
+					</select></td>
+				<td><input type="radio" value="OUI" name="choix" id="oui">&nbsp;OUI
+					<input type="radio" value="NON" name="choix" id="non">&nbsp;NON
+					<input type="radio" value="PEUT-&Ecirc;TRE" name="choix" id="p-e" checked>&nbsp;PEUT-&Ecirc;TRE</td></tr>
+		</table>
+		<table class="border">
+			<tr><td><input type="reset"  value="R&eacute;initialiser"></td>
+				<td><input type="button" value="Valider les champs" onclick="javascript:validate()"></td></tr>
+		</table>
+		<table class="border">
+			<tr><td>MENU&nbsp;:</td><td>RADIO&nbsp;:</td></tr>
+			<tr><td><input type="text" id="menu"></td><td><input type="text" id="radio"></td></tr>
+		</table>
+		</form>
+	</body>
+</html>

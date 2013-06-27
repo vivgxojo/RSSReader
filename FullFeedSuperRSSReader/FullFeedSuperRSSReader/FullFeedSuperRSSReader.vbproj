@@ -86,11 +86,14 @@
     <Import Include="System.Web.UI.HtmlControls" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="admins.xml" />
     <Content Include="feed.css" />
-    <Content Include="feed.xsl" />
+    <Content Include="feed.xsl">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="fullFeed.xml" />
     <Content Include="index.html" />
-    <Content Include="FullFeedSuperRSSReader.html" />
+    <None Include="FullFeedSuperRSSReader.php" />
     <Content Include="subscriptions.xml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -132,6 +135,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="connecter.php" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -141,6 +145,7 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <None Include="nouvelle_session.php" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
