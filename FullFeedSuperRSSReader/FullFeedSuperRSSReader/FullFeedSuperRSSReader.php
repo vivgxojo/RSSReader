@@ -3,28 +3,6 @@
 <head>
     <title></title>
     <link href="feed.css" rel="stylesheet" type="text/css" />
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            border: 0;
-        }
-        #output, #loading {
-            position: absolute;
-        }
-        #output {
-            top: 0px;
-            width: 500px;
-            bottom: 0px;
-        }
-        #loading {
-            top: 0px;
-            left: 500px;
-            right: 0;
-            bottom: 0px;
-        }
-
-    </style>
 </head>
 <body>
 <?php
@@ -41,18 +19,20 @@ phpinfo();
 
     ?>
 
-    <div id="output">
-        <form method="get" action="FullFeedSuperRSSReader.php">
-            <label for="Text1">Nom d'utilisateur </label><input id="Text1" type="text" /><br />
-            <label for="Password1">Mot de passe </label><input id="Password1" type="password" /><br />
-            <input id="Button1" type="submit" value="Ouvrir session" /><br />
-        </form>
-        Ou : <br />
-        Importez votre fichier d'abonnements
-        <input id="fileinput" type="file" /><br />
+    <div id="sidebar">
+        <div id="import">
+			<form method="get" action="FullFeedSuperRSSReader.php">
+				<label for="Text1">Nom d'utilisateur </label><input id="Text1" type="text" /><br />
+				<label for="Password1">Mot de passe </label><input id="Password1" type="password" /><br />
+				<input id="Button1" type="submit" value="Ouvrir session" /><br />
+			</form>
+			Ou : <br />
+            Importez votre fichier d'abonnements
+            <input id="fileinput" type="file" />
+        </div>
     </div>
 
-    <div id="loading">
+    <div id="mainContent">
     </div>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
@@ -63,13 +43,14 @@ phpinfo();
         alert("Welcome again " + path);
     }
 
+    if (localStorage.getItem("abonnements")) {
+        xmlDoc = $.parseXML(localStorage.getItem("abonnements"));
+		loadOPMLDoc(xmlDoc);
+    }
+
     function readSingleFile(evt) {
-        
         //Retrieve the first (and only!) File from the FileList object
         var f = evt.target.files[0];
-
-        //set a cookie
-        setCookie("path", document.getElementById('fileinput').value, 365);
 
         if (f) {
             var r = new FileReader();
@@ -78,64 +59,12 @@ phpinfo();
 
                 //load le dom du fichier d'abonnements
                 xmlDoc = $.parseXML(contents);
-
-                //load le xslt
-                xsl = loadXMLFile("abonnement.xsl");
-
-                //transforme le fichier d'abonnements avec le xslt
-                result = transform(xmlDoc, xsl);
-
-
-                output = document.getElementById("output");
-                output.appendChild(result);
-                links = output.getElementsByTagName('a');
-
-                //rss = loadXMLFile(links[0].href);
-                //alert(rss); 
-
-                //get rss complete feeds from all subscriptions
-                var nbActiveRequest = 0;
-                var content = '<?xml version="1.0" encoding="utf-8"?>\n<rss version="2.0">\n';
-                $("#loading").text("Loading...");
-                $(links).each(function () {
-                    nbActiveRequest++;
-                    $.get('http://w4.uqo.ca/monm30/echoXML.php?url=' + encodeURIComponent($(this).attr('href')), function (cont) {
-                        $("#loading").text("Loading..." + nbActiveRequest);
-                        nbActiveRequest--;
-                        try {
-				            rssFeed = $.parseXML(cont);
-			            }
-			            catch (e) {
-				            console.log(e);
-			            }
-                        channel = rssFeed.getElementsByTagName("channel")[0];
-                        //DEVRAIT LIMITER AUX ARTICLES RÉCENTS : UNE OU DEUX SEMAINE
-                        //limite = loadXMLFile("limite.xsl");
-                        //channel = transform(channel, limite);
-
-                        //alert(xmlToString(channel));
-                        content += xmlToString(channel);
-                        if (nbActiveRequest == 0) {
-                            $("#loading").text("done");
-                            content += '\n</rss>'
-                            //alert(content);
-                            rss = $.parseXML(content);
-                            rssXSL = loadXMLFile("feed.xsl");
-                            rssResult = transform(rss, rssXSL);
-                            $("#loading").html(rssResult);
-                        }
-                    });
-                });
-
-                //                var string = (new XMLSerializer()).serializeToString(result);
-                //                
-                //                var blob = new Blob(["<?xml version='1.0' encoding='UTF-8'?>\n"+string], {
-                //                    type: "text/plain;charset=utf-8;",
-                //                });
-                //                saveAs(blob, "subscriptions.xml");
+                localStorage.setItem("abonnements", new XMLSerializer().serializeToString(xmlDoc));
+                loadOPMLDoc(xmlDoc);
             }
             r.readAsText(f);
-        } else {
+        }
+        else {
             alert("Failed to load file");
         }
 
@@ -186,15 +115,58 @@ phpinfo();
         }
     }
 
-//    //load le dom du fichier d'abonnements
-//    xmlDoc = loadXMLFile("subscriptions.xml");
+    function loadOPMLDoc(xmlDoc) {
+        //load le xslt
+        xsl = loadXMLFile("abonnement.xsl");
 
-//    //load le xslt
-//    xsl = loadXMLFile("abonnement.xsl");
+        //transforme le fichier d'abonnements avec le xslt
+        result = transform(xmlDoc, xsl);
 
-//    //transforme le fichier d'abonnements avec le xslt
-//    result = transform(xmlDoc, xsl);
-    //    //alert(result);
+        output = document.getElementById("sidebar");
+        output.appendChild(result);
+        links = output.getElementsByTagName('a');
+        $('.feedTitle').click(function(e) {
+            $(".feedTitle").removeClass("feedSelected");
+            $(this).addClass("feedSelected");
+            loadFeedContent($(this).attr('href'));
+            e.preventDefault();
+        });
+
+        //get rss complete feeds from all subscriptions
+        var nbActiveRequest = 0;
+        loadFeedContent($(links[0]).attr('href'));
+    }
+
+    function loadFeedContent(url, content) {
+        $("#mainContent").text("Loading...");
+        var content = '<?xml version="1.0" encoding="utf-8"?>\n<rss version="2.0">\n';
+
+        $.get('http://w4.uqo.ca/monm30/echoXML.php?url=' + encodeURIComponent(url), function (cont) {
+                try {
+                    rssFeed = $.parseXML(cont);
+                }
+                catch (e) {
+                    console.log(e);
+                }
+                channel = rssFeed.getElementsByTagName("channel")[0];
+                content += xmlToString(channel);
+                $("#mainContent").text("done");
+                content += '\n</rss>'
+                rss = $.parseXML(content);
+                rssXSL = loadXMLFile("feed.xsl");
+                rssResult = transform(rss, rssXSL);
+                if(navigator.userAgent.indexOf("Firefox") > -1) {
+                    $("#mainContent").html(rssResult);
+                    $(".article").each(function() {
+                        var contentDiv = this.firstChild.nextSibling;
+                        contentDiv.innerHTML = contentDiv.textContent;
+                    });
+                }
+                else {
+                    $("#mainContent").html(rssResult);
+                }
+        });
+    }
 
     function getCookie(c_name) {
         var c_value = document.cookie;

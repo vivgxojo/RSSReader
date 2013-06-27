@@ -42,15 +42,15 @@
                 )
          "/>
       <div class="article">
-        <a href="{link}" rel="bookmark"><xsl:value-of disable-output-escaping="yes" select="title"/></a>
-        <br/>
-        <a>
-          <xsl:attribute name="href">
-            <xsl:value-of select="../link"/>
-          </xsl:attribute>
-          <xsl:value-of select="../title"/></a>
-        <xsl:text> </xsl:text>
-          <xsl:value-of select="pubDate"/>  
+		<h3>
+			<a href="{link}" rel="bookmark"><xsl:value-of disable-output-escaping="yes" select="title"/></a>
+			<xsl:text> </xsl:text>
+			<span class="date"><xsl:value-of select="pubDate"/></span>
+			(<a>
+				<xsl:attribute name="href"> <xsl:value-of select="../link"/> </xsl:attribute>
+				<xsl:value-of select="../title"/>
+			</a>)
+		</h3>
 			<div>
 			<xsl:choose>
 				<xsl:when test="content:encoded"><xsl:value-of disable-output-escaping="yes" select="content:encoded" /></xsl:when>

@@ -19,3 +19,90 @@ div { line-height:1.6em; }
 div#content { background:#fff; margin-right:15px; padding-left:1em;}
 div#content div { margin:0 1em 1em 0; }
 
+/* COLORS: */
+/* RED:   #A33029 */
+/* GREEN: #4999EF0 */
+/* BROWN: #5C3330 */
+/* DBLUE: #0F3B66 */
+/* LBLUE: #99bbdd */
+
+html, body {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+#sidebar, #mainContent {
+	position: absolute;
+}
+
+#sidebar {
+	position: fixed;
+	top: 0px;
+	width: 25%;
+	bottom: 0px;
+	padding: 0px;
+	overflow: auto;
+}
+
+#sidebar p {
+	padding: 0px;
+}
+
+
+#import {
+	background: #99bbdd;
+	padding: 0.5em;
+	box-shadow: 0 2px 5px -2px #555;
+}
+
+a.feedTitle{
+	display: block;
+	border-left: 3px #ccc solid;
+	border-bottom: 1px #555 solid;
+	/* width: 100%; */
+	padding: 0.3em;
+	color: #000;
+	font-weight: bold;
+	font-size: 0.8em;
+}
+
+a.feedTitle:hover, a.feedSelected {
+	border-left: 3px #A33029 solid;
+	background: #eee;
+	/* border-bottom-color: transparent; */
+	box-shadow: inset 0 0 3px #555;
+}
+
+a.feedSelected{
+	border-left: 3px #99bbdd solid;
+	background: #eee;
+}
+
+.article h3 {
+	background: #99bbdd;
+	padding: 0.5em;
+	margin-bottom: 10px;
+	box-shadow: 0 2px 5px -2px #555;
+}
+.article h3 a {
+	color: #000;
+}
+
+.date {
+	color: #666;
+	font-family: monospace;
+	font-size: 12px;
+
+}
+
+.article p {
+	padding: 0.5em;
+}
+
+#mainContent {
+	top: 0px;
+	left: 25%;
+	right: 0;
+	bottom: 0px;
+}
