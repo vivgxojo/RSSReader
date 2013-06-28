@@ -3,7 +3,11 @@
     xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl"
 >
 	<xsl:output method="html" indent="yes"/>
-
+  
+  <xsl:template match="/">
+    <xsl:apply-templates select="//body"/>
+  </xsl:template>
+  
 	<xsl:template match="//body">
 	<xsl:apply-templates select="outline"/>
 	</xsl:template>

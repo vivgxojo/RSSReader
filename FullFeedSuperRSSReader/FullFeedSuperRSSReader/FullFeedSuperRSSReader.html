@@ -1,22 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>Full Feed Super RSS Reader</title>
     <link href="feed.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <div id="sidebar">
         <div id="import">
+            <div id="nav">
+                <ul>
+                   <li><a class="nav" href="about.html">À propos</a></li>
+                   <li><a class="nav" href="help.html">Aide</a></li>
+                   <li><input id="urlNouvAbon" type="text" placeholder="URL du nouveau flux RSS" />
+                       <input id="btnAjouter" type="button" value="Ajouter un abonnement" onclick="ajouterAbonnement()">
+                   </li>
+                </ul>
+            </div><hr>
             Importez votre fichier d'abonnements
-            <input id="fileinput" type="file" />
+            <input id="fileinput" type="file" onchange="readSingleFile" /><br>
+            <a class="nav" href="">Afficher tous les articles</a>
+        </div>
+        <div id="output">
         </div>
     </div>
-
+    
     <div id="mainContent">
     </div>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
 <script type="text/javascript">
+    //ajoute un abonnement dans le storage local et affiche ses articles
+    function ajouterAbonnement(){
+        //TODO
+    }
+
+    //load les pages de navigation dans la section de contenu
+    $('.nav').click(function(e) {
+            $(".feedTitle").removeClass("feedSelected");
+            $("#mainContent").load($(this).attr('href'));
+            e.preventDefault();
+    });
+
     //check for cookie
     var path = getCookie("path");
     if (path != null && path != "") {
@@ -66,6 +90,21 @@
         }
         return xmlString;
     } 
+        
+    //retourne le dom d'une chaine xml
+    function loadXMLString(txt) {
+        if (window.DOMParser) {
+            parser = new DOMParser();
+            xmlDoc = parser.parseFromString(txt, "text/xml");
+        }
+        else // Internet Explorer
+        {
+            xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+            xmlDoc.async = false;
+            xmlDoc.loadXML(txt);
+        }
+        return xmlDoc
+    }
 
     //retourne le dom d'un fichier xml
     function loadXMLFile(file) {
@@ -84,7 +123,7 @@
     function transform(xml, xsl) {
         if (window.ActiveXObject) {
             ex = xml.transformNode(xsl);
-            document.getElementById("output").innerHTML = ex;
+            return loadXMLString(ex);
         }
         // code for Mozilla, Firefox, Opera, etc.
         else if (document.implementation && document.implementation.createDocument) {
@@ -101,8 +140,9 @@
 
         //transforme le fichier d'abonnements avec le xslt
         result = transform(xmlDoc, xsl);
-
-        output = document.getElementById("sidebar");
+        
+        output = document.getElementById("output");
+        output.innerHTML = "";
         output.appendChild(result);
         
         $('.feedTitle').click(function(e) {
