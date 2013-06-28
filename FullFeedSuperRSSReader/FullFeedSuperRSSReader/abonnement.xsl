@@ -4,23 +4,34 @@
 >
 	<xsl:output method="html" indent="yes"/>
 
-	<xsl:template match="/">
-	<xsl:apply-templates select="//outline"/>
+	<xsl:template match="//body">
+	<xsl:apply-templates select="outline"/>
 	</xsl:template>
 
     <xsl:template match="outline">
-      <p>
-        <a>
-          <xsl:attribute name="href">
-            <xsl:text>http://ftr.fivefilters.org/makefulltextfeed.php?url=</xsl:text>
-            <xsl:value-of select="@xmlUrl"/>
-          </xsl:attribute>
-          <xsl:attribute name="class">
-            <xsl:text>feedTitle</xsl:text>
-          </xsl:attribute>
-          <xsl:value-of select="@title"/>
-        </a>
-      </p>
-      
+			<xsl:choose>
+				<xsl:when test="starts-with(@type, 'rss')">
+					<a>
+						<xsl:attribute name="href">
+							<xsl:text>http://ftr.fivefilters.org/makefulltextfeed.php?url=</xsl:text>
+							<xsl:value-of select="@xmlUrl"/>
+						</xsl:attribute>
+						<xsl:attribute name="class">
+							<xsl:text>feedTitle</xsl:text>
+						</xsl:attribute>
+						<xsl:value-of select="@title"/>
+					</a>
+				</xsl:when>
+				<xsl:otherwise>
+					<!-- outline node is a folder -->
+					<div class="feedFolder">
+						<div class="folderTitle"><xsl:value-of select="@title"/></div>
+						<!-- apply template to child nodes -->
+						<div class="folderContent">
+							<xsl:apply-templates select="outline"/>
+						</div>
+					</div>
+				</xsl:otherwise>
+			</xsl:choose>
     </xsl:template>
 </xsl:stylesheet>
