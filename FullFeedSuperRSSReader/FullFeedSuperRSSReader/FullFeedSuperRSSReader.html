@@ -29,6 +29,8 @@
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
 <script type="text/javascript">
+    var activeRequests = [];
+
     //ajoute un abonnement dans le storage local et affiche ses articles
     function ajouterAbonnement(){
         //TODO
@@ -49,7 +51,7 @@
 
     if (localStorage.getItem("abonnements")) {
         xmlDoc = $.parseXML(localStorage.getItem("abonnements"));
-		loadOPMLDoc(xmlDoc);
+        loadOPMLDoc(xmlDoc);
     }
 
     function readSingleFile(evt) {
@@ -152,28 +154,30 @@
             e.preventDefault();
         });
 
-		$('.folderContent').hide();
-		$('.folderTitle').click(function(e) {
-			$(this).next().slideToggle();
-		});
+        $('.folderContent').hide();
+        $('.folderTitle').click(function(e) {
+            $(this).next().slideToggle();
+        });
 
         //get rss complete feeds from all subscriptions
         $("#mainContent").text("Loading...");
         content = '<?xml version="1.0" encoding="utf-8"?>\n<rss version="2.0">\n';
+        cancelRequests(activeRequests);
         nbActiveRequest = 0;
         links = output.getElementsByTagName('a');
-        //alert(links.length);
         $(links).each(function () {
             loadFeedContent($(this).attr('href'));
         });
-        
     }
 
     function loadFeedContent(url) {
         nbActiveRequest++;
-        $.get('http://w4.uqo.ca/monm30/echoXML.php?url=' + encodeURIComponent(url), function (cont) {
+        var req = $.get('http://w4.uqo.ca/monm30/echoXML.php?url=' + encodeURIComponent(url), function (cont) {
+
                 $("#loading").text("Loading..." + nbActiveRequest);
-                        nbActiveRequest--;
+                nbActiveRequest--;
+                //removeRequest from array
+                activeRequests.splice(activeRequests.indexOf(this), 1);
 
                 try {
                     rssFeed = $.parseXML(cont);
@@ -204,13 +208,17 @@
                     }
                 }
         });
+        activeRequests.push(req);
     }
 
     function loadOneFeedContent(url) {
+        cancelRequests(activeRequests);
+
         $("#mainContent").text("Loading...");
         var content = '<?xml version="1.0" encoding="utf-8"?>\n<rss version="2.0">\n';
-        $.get('http://w4.uqo.ca/monm30/echoXML.php?url=' + encodeURIComponent(url), function (cont) {
-                
+        var req = $.get('http://w4.uqo.ca/monm30/echoXML.php?url=' + encodeURIComponent(url), function (cont) {
+                //removeRequest from array
+                activeRequests.splice(activeRequests.indexOf(this), 1);
                 try {
                     rssFeed = $.parseXML(cont);
                 }
@@ -226,7 +234,7 @@
                 rss = $.parseXML(content);
                 rssXSL = loadXMLFile("feed.xsl");
                 rssResult = transform(rss, rssXSL);
-                
+
                 if(navigator.userAgent.indexOf("Firefox") > -1) {
                     $("#mainContent").html(rssResult);
                     $(".article").each(function() {
@@ -236,9 +244,17 @@
                 }
                 else {
                     $("#mainContent").html(rssResult);
-                    
                 }
         });
+        activeRequests.push(req);
+    }
+
+    function cancelRequests(requests) {
+        // abort all activeRequests
+        while(requests.length > 0) {
+            r = requests.pop();
+            r.abort();
+        }
     }
 
     function getCookie(c_name) {
