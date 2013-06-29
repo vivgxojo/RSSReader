@@ -152,6 +152,11 @@
             e.preventDefault();
         });
 
+		$('.folderContent').hide();
+		$('.folderTitle').click(function(e) {
+			$(this).next().slideToggle();
+		});
+
         //get rss complete feeds from all subscriptions
         $("#mainContent").text("Loading...");
         content = '<?xml version="1.0" encoding="utf-8"?>\n<rss version="2.0">\n';

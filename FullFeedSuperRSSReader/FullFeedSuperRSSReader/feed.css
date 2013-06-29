@@ -49,6 +49,13 @@ html, body {
 	padding: 0px;
 }
 
+#mainContent {
+	top: 0px;
+	right: 0;
+	bottom: 0px;
+	float: left;
+	width: 75%;
+}
 
 #import {
 	background: #99bbdd;
@@ -61,6 +68,7 @@ a.feedTitle{
 	border-left: 3px #ccc solid;
 	border-bottom: 1px #555 solid;
 	/* width: 100%; */
+	max-width: 100%;
 	padding: 0.3em;
 	color: #000;
 	font-weight: bold;
@@ -100,15 +108,14 @@ a.feedSelected{
 	padding: 0.5em;
 }
 
-#mainContent {
-	top: 0px;
-	left: 25%;
-	right: 0;
-	bottom: 0px;
+.article img {
+	max-width: 100%;
+	height: auto;
 }
 
 .folderTitle::after {
-	content: " /";
+	/* \00A0 is a non-breaking space */
+	content: "\00A0/";
 }
 
 .folderContent .feedTitle{
