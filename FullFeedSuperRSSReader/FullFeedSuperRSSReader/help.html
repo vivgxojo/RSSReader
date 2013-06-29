@@ -63,7 +63,22 @@
                 <a href="mailto:webmaster.araignee@gmail.com">contactez-nous</a>.
         </li>
     </ol>
-    
+     <p>
+        <strong>Je ne veux pas changer de lecteur RSS, je cherche seulement le 
+         convertisseur d&#39;abonnements pour avoir des flux compltes :&nbsp;
+        </strong>
+    </p>
 
+    <p style="margin-left:40px;">
+        Il est ici
+        : <a class="nav" href="FullFeedRSSSubscriptionConverter.html">Full Feed RSS Subscription Converter</a></p>
+    <script>
+        //load les pages dans la section de contenu
+        $('.nav').click(function (e) {
+            $(".feedTitle").removeClass("feedSelected");
+            $("#mainContent").load($(this).attr('href'));
+            e.preventDefault();
+        });
+    </script>
 </body>
 </html>

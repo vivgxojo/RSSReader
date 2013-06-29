@@ -17,7 +17,7 @@
 				<xsl:when test="starts-with(@type, 'rss')">
 					<a>
 						<xsl:attribute name="href">
-							<xsl:text>http://ftr.fivefilters.org/makefulltextfeed.php?url=</xsl:text>
+							<xsl:text>http://montreal.dyndns-ip.com:8888/full-text/makefulltextfeed.php?url=</xsl:text>
 							<xsl:value-of select="@xmlUrl"/>
 						</xsl:attribute>
 						<xsl:attribute name="class">
