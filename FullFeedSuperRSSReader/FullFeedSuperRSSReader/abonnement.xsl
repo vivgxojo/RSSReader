@@ -8,7 +8,7 @@
     <xsl:apply-templates select="//body"/>
   </xsl:template>
   
-	<xsl:template match="//body">
+	<xsl:template match="body">
 	<xsl:apply-templates select="outline"/>
 	</xsl:template>
 
