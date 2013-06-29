@@ -87,6 +87,11 @@ a.feedSelected{
 	background: #eee;
 }
 
+a.supp
+{
+    border 1px solid black;
+}
+
 .article h3 {
 	background: #99bbdd;
 	padding: 0.5em;

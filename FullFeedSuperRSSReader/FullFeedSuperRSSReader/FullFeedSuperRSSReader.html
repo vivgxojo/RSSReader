@@ -31,7 +31,40 @@
 <script type="text/javascript">
     //ajoute un abonnement dans le storage local et affiche ses articles
     function ajouterAbonnement(){
-        //TODO
+        //afficher le nouvel abonnement
+        $(".feedTitle").removeClass("feedSelected");
+        newURL = "http://montreal.dyndns-ip.com:8888/full-text/makefulltextfeed.php?url="+$("#urlNouvAbon").val();
+        loadOneFeedContent(newURL);
+        
+        //ajouter l'abonnement au fichier
+        if(xmlDoc){
+            newOutline = xmlDoc.createElement("outline");
+            newOutline.setAttribute("xmlUrl", $("#urlNouvAbon").val());
+            newOutline.setAttribute("type", "rss");
+            var newTitle="";
+            while(newTitle==""){
+            newTitle = $("#mainContent .rssTitle:first").text();}
+          /*  path="//*[@id='content']/div[1]/h3/a[2]";
+            // code for IE
+            if (window.ActiveXObject){
+                var nodes=document.selectNodes(path);
+                newTitle = nodes[0].childNodes[0].nodeValue;
+            }
+            // code for Mozilla, Firefox, Opera, etc.
+            else if (document.implementation && document.implementation.createDocument){
+                var nodes=document.evaluate(path, xmlDoc, null, XPathResult.ANY_TYPE, null);
+                var result=nodes.iterateNext();
+                newTitle = result.childNodes[0].nodeValue;
+            }*/
+
+            alert(newTitle);
+            newOutline.setAttribute("title", newTitle);
+            xmlDoc.getElementsByTagName("body")[0].appendChild(newOutline);
+            console.log(xmlToString(xmlDoc));
+            loadOPMLDoc(xmlDoc);
+        }
+        
+        //ou créer un fichier avec le nouvel abonnement
     }
 
     //load les pages de navigation dans la section de contenu
@@ -149,6 +182,21 @@
             $(".feedTitle").removeClass("feedSelected");
             $(this).addClass("feedSelected");
             loadOneFeedContent($(this).attr('href'));
+            e.preventDefault();
+        });
+
+        supp = "<a class='supp'> x</a>";
+        $('.feedTitle').hover(
+          function () {
+            $(this).append($(supp));
+          },
+          function () {
+            $(this).find("a:last").remove();
+          }
+        );
+
+        $('.supp').click(function(e) {
+            alert('supprimer');
             e.preventDefault();
         });
 

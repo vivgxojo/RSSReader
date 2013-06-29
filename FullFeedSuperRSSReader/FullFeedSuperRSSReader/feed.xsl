@@ -49,6 +49,9 @@
 			(<a>
 				<xsl:attribute name="href"> <xsl:value-of select="../link"/> </xsl:attribute>
 				<xsl:value-of select="../title"/>
+        <xsl:attribute name="class">
+          <xsl:text>rssTitle</xsl:text>
+        </xsl:attribute>
 			</a>)
 		</h3>
 			<div>
