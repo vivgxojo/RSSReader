@@ -167,6 +167,15 @@
         links = output.getElementsByTagName('a');
         $(links).each(function () {
             loadFeedContent($(this).attr('href'));
+
+            // Add Favicon
+            var root = this.href.match("url=(http://[^/]*)");
+            if(root != null) {
+                var i = new Image();
+                i.src = root[1] + "/favicon.ico";
+                i.className = "favicon";
+                this.appendChild(i);
+            }
         });
     }
 
