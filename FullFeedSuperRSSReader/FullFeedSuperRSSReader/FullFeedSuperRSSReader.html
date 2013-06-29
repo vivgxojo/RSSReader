@@ -33,7 +33,20 @@
 
     //ajoute un abonnement dans le storage local et affiche ses articles
     function ajouterAbonnement(){
-        //TODO
+        $('.feedtitle').removeClass("feedSelected");
+
+        var newURL = "http://montreal.dyndns-ip.com:8888/full-text/makefulltextfeed.php?url="+$("#urlNouvAbon").val();
+        $.get('http://w4.uqo.ca/monm30/echoXML.php?url=' + encodeURIComponent(newURL), function(cont) {
+            try {
+                var rssFeed = $.parseXML(cont);
+                displayFeedFromXML(rssFeed);
+                console.log(rssFeed.getElementsByTagName("title")[0].textContent);
+                // TODO: Create the <outline> node from rssFeed
+            }
+            catch (e) {
+                console.log(e);
+            }
+        });
     }
 
     //load les pages de navigation dans la section de contenu
@@ -230,32 +243,38 @@
                 activeRequests.splice(activeRequests.indexOf(this), 1);
                 try {
                     rssFeed = $.parseXML(cont);
+                    $("#mainContent").text("done");
+                    displayFeedFromXML(rssFeed);
                 }
                 catch (e) {
                     console.log(e);
                 }
 
-                channel = rssFeed.getElementsByTagName("channel")[0];
-                content += xmlToString(channel);
-
-                $("#mainContent").text("done");
-                content += '\n</rss>'
-                rss = $.parseXML(content);
-                rssXSL = loadXMLFile("feed.xsl");
-                rssResult = transform(rss, rssXSL);
-
-                if(navigator.userAgent.indexOf("Firefox") > -1) {
-                    $("#mainContent").html(rssResult);
-                    $(".article").each(function() {
-                        var contentDiv = this.firstChild.nextSibling;
-                        contentDiv.innerHTML = contentDiv.textContent;
-                    });
-                }
-                else {
-                    $("#mainContent").html(rssResult);
-                }
         });
         activeRequests.push(req);
+    }
+
+    function displayFeedFromXML(feedDoc) {
+
+        var content = '<?xml version="1.0" encoding="utf-8"?>\n<rss version="2.0">\n';
+        var channel = feedDoc.getElementsByTagName("channel")[0];
+        content += xmlToString(channel);
+
+        content += '\n</rss>';
+        var rss = $.parseXML(content);
+        var rssXSL = loadXMLFile("feed.xsl");
+        var rssResult = transform(rss, rssXSL);
+
+        if(navigator.userAgent.indexOf("Firefox") > -1) {
+            $("#mainContent").html(rssResult);
+            $(".article").each(function() {
+                var contentDiv = this.firstChild.nextSibling;
+                contentDiv.innerHTML = contentDiv.textContent;
+            });
+        }
+        else {
+            $("#mainContent").html(rssResult);
+        }
     }
 
     function cancelRequests(requests) {
