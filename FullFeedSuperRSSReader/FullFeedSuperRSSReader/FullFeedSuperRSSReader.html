@@ -34,50 +34,30 @@
     //ajoute un abonnement dans le storage local et affiche ses articles
     function ajouterAbonnement(){
 
-//        //afficher le nouvel abonnement
-//        $(".feedTitle").removeClass("feedSelected");
-//        newURL = "http://montreal.dyndns-ip.com:8888/full-text/makefulltextfeed.php?url="+$("#urlNouvAbon").val();
-//        loadOneFeedContent(newURL);
-//        
-//        //ajouter l'abonnement au fichier
-//        if(xmlDoc){
-//            newOutline = xmlDoc.createElement("outline");
-//            newOutline.setAttribute("xmlUrl", $("#urlNouvAbon").val());
-//            newOutline.setAttribute("type", "rss");
-//            var newTitle="";
-//            while(newTitle==""){
-//            newTitle = $("#mainContent .rssTitle:first").text();}
-//          /*  path="//*[@id='content']/div[1]/h3/a[2]";
-//            // code for IE
-//            if (window.ActiveXObject){
-//                var nodes=document.selectNodes(path);
-//                newTitle = nodes[0].childNodes[0].nodeValue;
-//            }
-//            // code for Mozilla, Firefox, Opera, etc.
-//            else if (document.implementation && document.implementation.createDocument){
-//                var nodes=document.evaluate(path, xmlDoc, null, XPathResult.ANY_TYPE, null);
-//                var result=nodes.iterateNext();
-//                newTitle = result.childNodes[0].nodeValue;
-//            }*/
-
-//            alert(newTitle);
-//            newOutline.setAttribute("title", newTitle);
-//            xmlDoc.getElementsByTagName("body")[0].appendChild(newOutline);
-//            console.log(xmlToString(xmlDoc));
-//            loadOPMLDoc(xmlDoc);
-//        }
-//        
-//        
-
+        cancelRequests(activeRequests);
         $('.feedtitle').removeClass("feedSelected");
 
         var newURL = "http://montreal.dyndns-ip.com:8888/full-text/makefulltextfeed.php?url="+$("#urlNouvAbon").val();
         $.get('http://w4.uqo.ca/monm30/echoXML.php?url=' + encodeURIComponent(newURL), function(cont) {
             try {
                 var rssFeed = $.parseXML(cont);
-                displayFeedFromXML(rssFeed);
                 console.log(rssFeed.getElementsByTagName("title")[0].textContent);
-                // TODO: Create the <outline> node from rssFeed
+                              
+                //ajouter l'abonnement au fichier
+                if(xmlDoc){
+                    newOutline = xmlDoc.createElement("outline");
+                    newOutline.setAttribute("xmlUrl", $("#urlNouvAbon").val());
+                    newOutline.setAttribute("type", "rss");
+                    var newTitle = rssFeed.getElementsByTagName("title")[0].textContent;
+                    newOutline.setAttribute("title", newTitle);
+                    xmlDoc.getElementsByTagName("body")[0].appendChild(newOutline);
+                    console.log(xmlToString(xmlDoc));
+                    loadOPMLDoc(xmlDoc);
+                }
+                //afficher le nouvel abonnement
+                displayFeedFromXML(rssFeed);
+                // TODO: Sauvegarder xmlDoc dans le storage local
+                        
             }
             catch (e) {
                 console.log(e);
@@ -86,9 +66,13 @@
     }
 
     //load les pages de navigation dans la section de contenu
-    $('.nav').click(function(e) {
-            $(".feedTitle").removeClass("feedSelected");
-            $("#mainContent").load($(this).attr('href'));
+    $('.nav').click(function (e) {
+        cancelRequests(activeRequests);
+        $(".feedTitle").removeClass("feedSelected");
+            if($(this).attr('href')!="")
+                $("#mainContent").load($(this).attr('href'));
+            else
+                loadALL();
             e.preventDefault();
     });
 
@@ -101,6 +85,7 @@
     if (localStorage.getItem("abonnements")) {
         xmlDoc = $.parseXML(localStorage.getItem("abonnements"));
         loadOPMLDoc(xmlDoc);
+        loadALL();
     }
 
     function readSingleFile(evt) {
@@ -116,6 +101,7 @@
                 xmlDoc = $.parseXML(contents);
                 localStorage.setItem("abonnements", new XMLSerializer().serializeToString(xmlDoc));
                 loadOPMLDoc(xmlDoc);
+                loadALL();
             }
             r.readAsText(f);
         }
@@ -203,37 +189,29 @@
             e.preventDefault();
         });
 
-        supp = "<a class='supp'> x</a>";
-        $('.feedTitle').hover(
-          function () {
-            $(this).append($(supp)); //TODO devrait insérer après et non append
-          },
-          function () {
-            $(this).find("a:last").remove();
-          }
-        );
+//        supp = "<a class='supp'> x</a>";
+//        $('.feedTitle').hover(
+//          function () {
+//            $(this).append($(supp)); //TODO devrait insérer après et non append
+//          },
+//          function () {
+//            $(this).find("a:last").remove();
+//          }
+//        );
 
-        $('.supp').click(function(e) {
-            alert('supprimer');
-            //TODO ôter l'abonnement
-            e.preventDefault();
-        });
+//        $('.supp').click(function(e) {
+//            alert('supprimer');
+//            //TODO ôter l'abonnement
+//            e.preventDefault();
+//        });
 
         $('.folderContent').hide();
         $('.folderTitle').click(function(e) {
             $(this).next().slideToggle();
         });
 
-
-        //get rss complete feeds from all subscriptions
-        $("#mainContent").text("Loading...");
-        content = '<?xml version="1.0" encoding="utf-8"?>\n<rss version="2.0">\n';
-        cancelRequests(activeRequests);
-        nbActiveRequest = 0;
         links = output.getElementsByTagName('a');
         $(links).each(function () {
-            loadFeedContent($(this).attr('href'));
-
             // Add Favicon
             var root = this.href.match("url=(http://[^/]*)");
             if(root != null) {
@@ -245,43 +223,59 @@
         });
     }
 
+    //get rss complete feeds from all subscriptions
+    function loadALL() { 
+        $("#mainContent").text("Loading...");
+        content = '<?xml version="1.0" encoding="utf-8"?>\n<rss version="2.0">\n';
+        cancelRequests(activeRequests);
+        nbActiveRequest = 0;
+        output = document.getElementById("output");
+        links = output.getElementsByTagName('a');
+        $(links).each(function () {
+            loadFeedContent($(this).attr('href'));
+        });
+    }
+
     function loadFeedContent(url) {
         nbActiveRequest++;
+
         var req = $.get('http://w4.uqo.ca/monm30/echoXML.php?url=' + encodeURIComponent(url), function (cont) {
+            nbActiveRequest--;
+            $("#mainContent").text("Loading..." + nbActiveRequest);
 
-                $("#loading").text("Loading..." + nbActiveRequest);
-                nbActiveRequest--;
-                //removeRequest from array
-                activeRequests.splice(activeRequests.indexOf(this), 1);
+            //removeRequest from array
+            activeRequests.splice(activeRequests.indexOf(this), 1);
 
-                try {
-                    rssFeed = $.parseXML(cont);
+            try {
+                rssFeed = $.parseXML(cont);
+            }
+            catch (e) {
+                console.log(e);
+            }
+
+            channel = rssFeed.getElementsByTagName("channel")[0];
+            content += xmlToString(channel);
+
+            if (nbActiveRequest == 0) {
+
+                $("#mainContent").text("done");
+                content += '\n</rss>'
+                //$("#mainContent").text(content);
+                rss = $.parseXML(content);
+                rssXSL = loadXMLFile("feed.xsl");
+                rssResult = transform(rss, rssXSL);
+                //alert(xmlToString(rssResult));
+                if (navigator.userAgent.indexOf("Firefox") > -1) {
+                    $("#mainContent").html(rssResult);
+                    $(".article").each(function () {
+                        var contentDiv = this.firstChild.nextSibling;
+                        contentDiv.innerHTML = contentDiv.textContent;
+                    });
                 }
-                catch (e) {
-                    console.log(e);
+                else {
+                    $("#mainContent").html(rssResult);
                 }
-
-                channel = rssFeed.getElementsByTagName("channel")[0];
-                content += xmlToString(channel);
-
-                if (nbActiveRequest == 0) {
-                    $("#mainContent").text("done");
-                    content += '\n</rss>'
-                    rss = $.parseXML(content);
-                    rssXSL = loadXMLFile("feed.xsl");
-                    rssResult = transform(rss, rssXSL);
-                
-                    if(navigator.userAgent.indexOf("Firefox") > -1) {
-                        $("#mainContent").html(rssResult);
-                        $(".article").each(function() {
-                            var contentDiv = this.firstChild.nextSibling;
-                            contentDiv.innerHTML = contentDiv.textContent;
-                        });
-                    }
-                    else {
-                        $("#mainContent").html(rssResult);
-                    }
-                }
+            }
         });
         activeRequests.push(req);
     }
