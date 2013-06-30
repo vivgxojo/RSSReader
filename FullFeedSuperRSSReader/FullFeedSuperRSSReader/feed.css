@@ -126,3 +126,10 @@ a.supp
 .folderContent .feedTitle{
 	padding-left: 20px;
 }
+
+.favicon {
+    height: 16px;
+    width: auto;
+    float: right;
+    margin-right: 5px;
+}
