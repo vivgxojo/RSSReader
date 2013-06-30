@@ -63,7 +63,7 @@ html, body {
 	box-shadow: 0 2px 5px -2px #555;
 }
 
-a.feedTitle{
+.sideLine{
 	display: block;
 	border-left: 3px #ccc solid;
 	border-bottom: 1px #555 solid;
@@ -74,8 +74,11 @@ a.feedTitle{
 	font-weight: bold;
 	font-size: 0.8em;
 }
-
-a.feedTitle:hover, a.feedSelected {
+.supp
+{
+    display:none;
+}
+.sideLine:hover, a.feedSelected {
 	border-left: 3px #A33029 solid;
 	background: #eee;
 	/* border-bottom-color: transparent; */

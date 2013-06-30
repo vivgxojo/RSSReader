@@ -56,8 +56,8 @@
                 }
                 //afficher le nouvel abonnement
                 displayFeedFromXML(rssFeed);
-                // TODO: Sauvegarder xmlDoc dans le storage local
-                        
+                //Sauvegarder xmlDoc dans le storage local
+                localStorage.setItem("abonnements", new XMLSerializer().serializeToString(xmlDoc));        
             }
             catch (e) {
                 console.log(e);
@@ -189,21 +189,29 @@
             e.preventDefault();
         });
 
-//        supp = "<a class='supp'> x</a>";
-//        $('.feedTitle').hover(
-//          function () {
-//            $(this).append($(supp)); //TODO devrait insérer après et non append
-//          },
-//          function () {
-//            $(this).find("a:last").remove();
-//          }
-//        );
+        $('.sideLine').hover(
+          function () {
+              this.firstChild.style.display = 'inline';
+          },
+          function () {
+              this.firstChild.style.display = 'none';
+          }
+        );
 
-//        $('.supp').click(function(e) {
-//            alert('supprimer');
-//            //TODO ôter l'abonnement
-//            e.preventDefault();
-//        });
+          $('.supp').click(function (e) {
+              url = $(this).next().attr('href');
+              //ôter l'abonnement
+              outlines = xmlDoc.getElementsByTagName('outline');
+              //alert(outlines[0].getAttribute('xmlUrl'));
+              for (i = 0; i < outlines.length; i++) {
+                  //alert(line);
+                  if (url.indexOf(outlines[i].getAttribute('xmlUrl')) !== -1)
+                      outlines[i].parentNode.removeChild(outlines[i]);
+              }
+              loadOPMLDoc(xmlDoc);
+              localStorage.setItem("abonnements", new XMLSerializer().serializeToString(xmlDoc));
+              e.preventDefault();
+          });
 
         $('.folderContent').hide();
         $('.folderTitle').click(function(e) {
