@@ -96,6 +96,7 @@
     </Content>
     <Content Include="about.html" />
     <Content Include="FullFeedSuperRSSReader.html" />
+    <Content Include="util.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

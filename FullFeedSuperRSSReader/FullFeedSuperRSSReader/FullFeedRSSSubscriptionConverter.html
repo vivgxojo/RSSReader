@@ -28,7 +28,7 @@
         Step 1: Export your data from your current RSS reader.</p>
     <p>
         Step 2: Upload your OPML (XML) subscription file to our service.
-        <input id="fileinput" type="file" /></p>
+        <input id="fileinputC" type="file" /></p>
    <p>
         Step 3: Download the result subscription file with full feeds.</p>
    <p>
@@ -38,8 +38,9 @@
         Note: This has been tested in Google Chrome browser.</p>
 
 <script src="FileSaver.js" type="text/javascript"></script>
+<script src="util.js" type="text/javascript"></script>
 <script type="text/javascript">
-    function readSingleFile(evt) {
+    function readSingleFileC(evt) {
         //Retrieve the first (and only!) File from the FileList object
         var f = evt.target.files[0];
 
@@ -70,48 +71,8 @@
         }
 
     }
-    //retourne le dom d'une chaine xml
-    function loadXMLString(txt) {
-        if (window.DOMParser) {
-            parser = new DOMParser();
-            xmlDoc = parser.parseFromString(txt, "text/xml");
-        }
-        else // Internet Explorer
-        {
-            xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-            xmlDoc.async = false;
-            xmlDoc.loadXML(txt);
-        }
-        return xmlDoc
-    }
-    //retourne le dom d'un fichier xml
-    function loadXMLFile(file) {
-        if (window.ActiveXObject) {
-            xhttp = new ActiveXObject("Msxml2.XMLHTTP.3.0");
-        }
-        else {
-            xhttp = new XMLHttpRequest();
-        }
-        xhttp.open("GET", file, false);
-        xhttp.send("");
-        return xhttp.responseXML;
-    }
-    //retourne le résultat de la transformation xsl
-    function transform(xml, xsl) {
-        if (window.ActiveXObject) {
-            ex = xml.transformNode(xsl);
-            document.getElementById("output").innerHTML = ex;
-        }
-        // code for Mozilla, Firefox, Opera, etc.
-        else if (document.implementation && document.implementation.createDocument) {
-            xsltProcessor = new XSLTProcessor();
-            xsltProcessor.importStylesheet(xsl);
-            resultDocument = xsltProcessor.transformToFragment(xml, document);
-            return resultDocument;
-        }
-    }
-
-    document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
+    
+    document.getElementById('fileinputC').addEventListener('change', readSingleFileC, false);
 </script>
 </body>
 </html>

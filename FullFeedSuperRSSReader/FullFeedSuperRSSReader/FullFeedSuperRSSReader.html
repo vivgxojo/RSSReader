@@ -28,6 +28,7 @@
     </div>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+<script src="util.js" type="text/javascript"></script>
 <script type="text/javascript">
     var activeRequests = [];
 
@@ -78,18 +79,14 @@
         e.preventDefault();
     });
 
-    //check for cookie
-    var path = getCookie("path");
-    if (path != null && path != "") {
-        //alert("Welcome again " + path);
-    }
-
+    //cherche les abonnements dans le storage local
     if (localStorage.getItem("abonnements")) {
         xmlDoc = $.parseXML(localStorage.getItem("abonnements"));
         loadOPMLDoc(xmlDoc);
         loadALL();
     }
 
+    //lit un nouveau fichier d'abonnements importé
     function readSingleFile(evt) {
         //Retrieve the first (and only!) File from the FileList object
         var f = evt.target.files[0];
@@ -114,65 +111,7 @@
     }
     document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
 
-
-    //retourne une string à partir dUn dom xml
-    function xmlToString(xmlData) {
-
-        var xmlString;
-        //IE
-        if (window.ActiveXObject) {
-            xmlString = xmlData.xml;
-        }
-        // code for Mozilla, Firefox, Opera, etc.
-        else {
-            xmlString = (new XMLSerializer()).serializeToString(xmlData);
-        }
-        return xmlString;
-    } 
-        
-    //retourne le dom d'une chaine xml
-    function loadXMLString(txt) {
-        if (window.DOMParser) {
-            parser = new DOMParser();
-            xmlDoc = parser.parseFromString(txt, "text/xml");
-        }
-        else // Internet Explorer
-        {
-            xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-            xmlDoc.async = false;
-            xmlDoc.loadXML(txt);
-        }
-        return xmlDoc
-    }
-
-    //retourne le dom d'un fichier xml
-    function loadXMLFile(file) {
-        if (window.ActiveXObject) {
-            xhttp = new ActiveXObject("Msxml2.XMLHTTP.3.0");
-        }
-        else {
-            xhttp = new XMLHttpRequest();
-        }
-        xhttp.open("GET", file, false);
-        xhttp.send("");
-        return xhttp.responseXML;
-    }
-
-    //retourne le résultat de la transformation xsl
-    function transform(xml, xsl) {
-        if (window.ActiveXObject) {
-            ex = xml.transformNode(xsl);
-            return loadXMLString(ex);
-        }
-        // code for Mozilla, Firefox, Opera, etc.
-        else if (document.implementation && document.implementation.createDocument) {
-            xsltProcessor = new XSLTProcessor();
-            xsltProcessor.importStylesheet(xsl);
-            resultDocument = xsltProcessor.transformToFragment(xml, document);
-            return resultDocument;
-        }
-    }
-
+    //affiche les abonnements dans la sidebare
     function loadOPMLDoc(xmlDoc) {
         //load le xslt
         xsl = loadXMLFile("abonnement.xsl");
@@ -184,6 +123,7 @@
         output.innerHTML = "";
         output.appendChild(result);
         
+        //affiche les articles de l'abonnement choisi
         $('.feedTitle').click(function(e) {
             $(".feedSelected").removeClass("feedSelected");
             $(this).parent().addClass("feedSelected");
@@ -191,6 +131,7 @@
             e.preventDefault();
         });
 
+        //affiche le x pour pouvoir supprimer un abonnement
         $('.sideLine').hover(
           function () {
               this.firstChild.style.display = 'inline';
@@ -200,7 +141,8 @@
           }
         );
 
-          $('.supp').click(function (e) {
+        //supprime un abonnement 
+        $('.supp').click(function (e) {
               url = $(this).next().attr('href');
               //ôter l'abonnement
               outlines = xmlDoc.getElementsByTagName('outline');
@@ -213,13 +155,15 @@
               loadOPMLDoc(xmlDoc);
               localStorage.setItem("abonnements", new XMLSerializer().serializeToString(xmlDoc));
               e.preventDefault();
-          });
+        });
 
+        //affiche le contenu d'un dossier
         $('.folderContent').hide();
         $('.folderTitle').click(function(e) {
             $(this).next().slideToggle();
         });
 
+        //affiche les favicons
         links = output.getElementsByTagName('a');
         $(links).each(function () {
             // Add Favicon
@@ -247,16 +191,15 @@
         });
     }
 
+    //récupère et affiche tous les abonnements
     function loadFeedContent(url) {
         nbActiveRequest++;
-
         var req = $.get('http://w4.uqo.ca/monm30/echoXML.php?url=' + encodeURIComponent(url), function (cont) {
             nbActiveRequest--;
             if(cancelled) {
                 return;
             }
             $("#mainContent").text("Loading..." + nbActiveRequest);
-
 
             //removeRequest from array
             activeRequests.splice(activeRequests.indexOf(this), 1);
@@ -295,6 +238,7 @@
         activeRequests.push(req);
     }
 
+    //récupère un abonnement
     function loadOneFeedContent(url) {
         cancelRequests(activeRequests);
 
@@ -316,6 +260,7 @@
         activeRequests.push(req);
     }
 
+    //affiche un abonnement
     function displayFeedFromXML(feedDoc) {
 
         var content = '<?xml version="1.0" encoding="utf-8"?>\n<rss version="2.0">\n';
@@ -339,42 +284,15 @@
         }
     }
 
+    // abort all activeRequests
     function cancelRequests(requests) {
-        // abort all activeRequests
         cancelled = true;
         while(requests.length > 0) {
             r = requests.pop();
             r.abort();
         }
     }
-
-    function getCookie(c_name) {
-        var c_value = document.cookie;
-        var c_start = c_value.indexOf(" " + c_name + "=");
-        if (c_start == -1) {
-            c_start = c_value.indexOf(c_name + "=");
-        }
-        if (c_start == -1) {
-            c_value = null;
-        }
-        else {
-            c_start = c_value.indexOf("=", c_start) + 1;
-            var c_end = c_value.indexOf(";", c_start);
-            if (c_end == -1) {
-                c_end = c_value.length;
-            }
-            c_value = unescape(c_value.substring(c_start, c_end));
-        }
-        return c_value;
-    }
-
-    function setCookie(c_name, value, exdays) {
-        var exdate = new Date();
-        exdate.setDate(exdate.getDate() + exdays);
-        var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
-        document.cookie = c_name + "=" + c_value;
-    }
-
+    
     </script>
 </body>
 </html>
