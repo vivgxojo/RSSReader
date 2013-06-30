@@ -69,11 +69,13 @@
     $('.nav').click(function (e) {
         cancelRequests(activeRequests);
         $(".feedTitle").removeClass("feedSelected");
-            if($(this).attr('href')!="")
-                $("#mainContent").load($(this).attr('href'));
-            else
-                loadALL();
-            e.preventDefault();
+        if($(this).attr('href') != "") {
+            $("#mainContent").load($(this).attr('href'));
+        }
+        else {
+            loadALL();
+        }
+        e.preventDefault();
     });
 
     //check for cookie
@@ -231,6 +233,7 @@
         nbActiveRequest = 0;
         output = document.getElementById("output");
         links = output.getElementsByTagName('a');
+        cancelled = false;
         $(links).each(function () {
             loadFeedContent($(this).attr('href'));
         });
@@ -241,7 +244,11 @@
 
         var req = $.get('http://w4.uqo.ca/monm30/echoXML.php?url=' + encodeURIComponent(url), function (cont) {
             nbActiveRequest--;
+            if(cancelled) {
+                return;
+            }
             $("#mainContent").text("Loading..." + nbActiveRequest);
+
 
             //removeRequest from array
             activeRequests.splice(activeRequests.indexOf(this), 1);
@@ -326,6 +333,7 @@
 
     function cancelRequests(requests) {
         // abort all activeRequests
+        cancelled = true;
         while(requests.length > 0) {
             r = requests.pop();
             r.abort();
