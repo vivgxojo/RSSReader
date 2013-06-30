@@ -24,6 +24,9 @@
             <xsl:attribute name="class">
               <xsl:text>supp</xsl:text>
             </xsl:attribute>
+            <xsl:attribute name="href">
+              <xsl:text>#</xsl:text>
+            </xsl:attribute>
             <xsl:text> x </xsl:text>
           </a>
           <a>

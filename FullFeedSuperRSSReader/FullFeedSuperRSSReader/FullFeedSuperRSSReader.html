@@ -185,8 +185,8 @@
         output.appendChild(result);
         
         $('.feedTitle').click(function(e) {
-            $(".feedTitle").removeClass("feedSelected");
-            $(this).addClass("feedSelected");
+            $(".feedSelected").removeClass("feedSelected");
+            $(this).parent().addClass("feedSelected");
             loadOneFeedContent($(this).attr('href'));
             e.preventDefault();
         });

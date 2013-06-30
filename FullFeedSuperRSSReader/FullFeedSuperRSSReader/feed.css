@@ -74,25 +74,42 @@ html, body {
 	font-weight: bold;
 	font-size: 0.8em;
 }
-.supp
-{
-    display:none;
-}
-.sideLine:hover, a.feedSelected {
+.sideLine:hover, .feedSelected {
 	border-left: 3px #A33029 solid;
 	background: #eee;
 	/* border-bottom-color: transparent; */
 	box-shadow: inset 0 0 3px #555;
 }
+a.feedTitle {
+    width:100%;
+    display: block;
+}
 
-a.feedSelected{
+.feedSelected{
 	border-left: 3px #99bbdd solid;
 	background: #eee;
 }
 
+.sideLine .feedTitle {
+    margin-left: 10px;
+}
+.sideLine:hover .feedTitle {
+    margin-left: 1;
+}
+
 a.supp
 {
-    border 1px solid black;
+    display:none;
+    text-decoration: none;
+    color: #000;
+    float:left;
+    padding:0;
+    margin:0;
+    margin-right: 0px;
+}
+
+a.supp:hover {
+    color: #A33029;
 }
 
 .article h3 {
