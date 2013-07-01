@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="converter.xsl" />
+    <Content Include="emptySubscriptions.xml" />
     <Content Include="FileSaver.js" />
     <Content Include="FullFeedRSSSubscriptionConverter.html" />
     <Content Include="help.html" />

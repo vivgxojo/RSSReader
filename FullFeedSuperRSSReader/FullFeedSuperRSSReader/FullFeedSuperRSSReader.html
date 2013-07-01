@@ -31,6 +31,7 @@
 <script src="util.js" type="text/javascript"></script>
 <script type="text/javascript">
     var activeRequests = [];
+    xmlDoc = "";
 
     //ajoute un abonnement dans le storage local et affiche ses articles
     function ajouterAbonnement(){
@@ -45,16 +46,18 @@
                 console.log(rssFeed.getElementsByTagName("title")[0].textContent);
                               
                 //ajouter l'abonnement au fichier
-                if(xmlDoc){
-                    newOutline = xmlDoc.createElement("outline");
-                    newOutline.setAttribute("xmlUrl", $("#urlNouvAbon").val());
-                    newOutline.setAttribute("type", "rss");
-                    var newTitle = rssFeed.getElementsByTagName("title")[0].textContent;
-                    newOutline.setAttribute("title", newTitle);
-                    xmlDoc.getElementsByTagName("body")[0].appendChild(newOutline);
-                    console.log(xmlToString(xmlDoc));
-                    loadOPMLDoc(xmlDoc);
+                if (xmlDoc == "") {
+                    xmlDoc = loadXMLFile("emptySubscriptions.xml");
                 }
+                newOutline = xmlDoc.createElement("outline");
+                newOutline.setAttribute("xmlUrl", $("#urlNouvAbon").val());
+                newOutline.setAttribute("type", "rss");
+                var newTitle = rssFeed.getElementsByTagName("title")[0].textContent;
+                newOutline.setAttribute("title", newTitle);
+                xmlDoc.getElementsByTagName("body")[0].appendChild(newOutline);
+                console.log(xmlToString(xmlDoc));
+                loadOPMLDoc(xmlDoc);
+                
                 //afficher le nouvel abonnement
                 displayFeedFromXML(rssFeed);
                 //Sauvegarder xmlDoc dans le storage local
@@ -96,8 +99,17 @@
             r.onload = function (e) {
                 var contents = e.target.result;
 
-                //load le dom du fichier d'abonnements
-                xmlDoc = $.parseXML(contents);
+                if (xmlDoc == "") {
+                    //load le dom du fichier d'abonnements
+                    xmlDoc = $.parseXML(contents);
+                }
+                else {
+                    newXmlDoc = $.parseXML(contents);
+                    newOutlines = newXmlDoc.getElementsByTagName('outline');
+                    for(i=0;i<newOutlines.length;i++){
+                        xmlDoc.getElementsByTagName('body')[0].appendChild(newOutlines[i]);
+                    }
+                }
                 localStorage.setItem("abonnements", new XMLSerializer().serializeToString(xmlDoc));
                 loadOPMLDoc(xmlDoc);
                 loadALL();
@@ -143,17 +155,20 @@
 
         //supprime un abonnement 
         $('.supp').click(function (e) {
-              url = $(this).next().attr('href');
-              //ôter l'abonnement
-              outlines = xmlDoc.getElementsByTagName('outline');
-              //alert(outlines[0].getAttribute('xmlUrl'));
-              for (i = 0; i < outlines.length; i++) {
-                  //alert(line);
-                  if (url.indexOf(outlines[i].getAttribute('xmlUrl')) !== -1)
-                      outlines[i].parentNode.removeChild(outlines[i]);
+              var r = confirm("Voulez vous vraiment supprimer cet abonnement?");
+              if (r == true) {
+                 url = $(this).next().attr('href');
+                  //ôter l'abonnement
+                  outlines = xmlDoc.getElementsByTagName('outline');
+                  //alert(outlines[0].getAttribute('xmlUrl'));
+                  for (i = 0; i < outlines.length; i++) {
+                      //alert(line);
+                      if (url.indexOf(outlines[i].getAttribute('xmlUrl')) !== -1)
+                          outlines[i].parentNode.removeChild(outlines[i]);
+                  }
+                  loadOPMLDoc(xmlDoc);
+                  localStorage.setItem("abonnements", new XMLSerializer().serializeToString(xmlDoc));
               }
-              loadOPMLDoc(xmlDoc);
-              localStorage.setItem("abonnements", new XMLSerializer().serializeToString(xmlDoc));
               e.preventDefault();
         });
 
