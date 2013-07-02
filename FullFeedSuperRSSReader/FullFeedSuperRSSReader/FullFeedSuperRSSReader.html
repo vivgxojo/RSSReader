@@ -38,6 +38,7 @@
 
         cancelRequests(activeRequests);
         $('.feedtitle').removeClass("feedSelected");
+        $("#sidebar").removeClass("full");
 
         var newURL = "http://montreal.dyndns-ip.com:8888/full-text/makefulltextfeed.php?url="+$("#urlNouvAbon").val();
         $.get('http://w4.uqo.ca/monm30/echoXML.php?url=' + encodeURIComponent(newURL), function(cont) {
@@ -88,6 +89,9 @@
         loadOPMLDoc(xmlDoc);
         loadALL();
     }
+    else {
+        $("#sidebar").addClass("full");
+    }
 
     //lit un nouveau fichier d'abonnements importé
     function readSingleFile(evt) {
@@ -97,6 +101,7 @@
         if (f) {
             var r = new FileReader();
             r.onload = function (e) {
+                $("#sidebar").removeClass("full");
                 var contents = e.target.result;
 
                 if (xmlDoc == "") {
