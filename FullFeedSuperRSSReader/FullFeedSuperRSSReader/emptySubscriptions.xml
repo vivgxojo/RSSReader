@@ -4,6 +4,14 @@
         <title>Abonnements</title>
     </head>
     <body>
-       
-	</body>
+      <outline text="Cyberpresse : acc science"
+           title="Cyberpresse : acc science" 
+           type="rss"
+           xmlUrl="http://www.cyberpresse.ca/rss/941.xml" 
+           htmlUrl="http://www.lapresse.ca"/>
+      <outline text="Les (Z)imparfaites" 
+           title="Les (Z)imparfaites" type="rss"
+           xmlUrl="http://www.lesimparfaites.com/feeds/posts/default" 
+           htmlUrl="http://www.lesimparfaites.com/"/>
+    </body>
 </opml>

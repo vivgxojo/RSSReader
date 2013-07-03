@@ -47,9 +47,6 @@
                 console.log(rssFeed.getElementsByTagName("title")[0].textContent);
                               
                 //ajouter l'abonnement au fichier
-                if (xmlDoc == "") {
-                    xmlDoc = loadXMLFile("emptySubscriptions.xml");
-                }
                 newOutline = xmlDoc.createElement("outline");
                 newOutline.setAttribute("xmlUrl", $("#urlNouvAbon").val());
                 newOutline.setAttribute("type", "rss");
@@ -86,12 +83,15 @@
     //cherche les abonnements dans le storage local
     if (localStorage.getItem("abonnements")) {
         xmlDoc = $.parseXML(localStorage.getItem("abonnements"));
-        loadOPMLDoc(xmlDoc);
-        loadALL();
     }
     else {
-        $("#sidebar").addClass("full");
+        //$("#sidebar").addClass("full");
+        //sinon load les abonnement démo
+        xmlDoc = loadXMLFile("emptySubscriptions.xml");
+        
     }
+    loadOPMLDoc(xmlDoc);
+    loadALL();
 
     //lit un nouveau fichier d'abonnements importé
     function readSingleFile(evt) {
