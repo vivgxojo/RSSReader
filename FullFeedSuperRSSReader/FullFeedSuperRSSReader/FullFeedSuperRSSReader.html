@@ -11,13 +11,14 @@
                 <ul>
                    <li><a class="nav" href="about.html">&Agrave; propos</a></li>
                    <li><a class="nav" href="help.html">Aide</a></li>
-                   <li><input id="urlNouvAbon" type="text" placeholder="URL du nouveau flux RSS" />
-                       <input id="btnAjouter" type="button" value="Ajouter un abonnement" onclick="ajouterAbonnement()">
-                   </li>
                 </ul>
             </div><hr>
-            Importez votre fichier d'abonnements
+            Importer un fichier d'abonnements
             <input id="fileinput" type="file" onchange="readSingleFile" /><br>
+            <hr>  
+            <input id="urlNouvAbon" type="text" placeholder="URL du nouveau flux RSS" />
+            <input id="btnAjouter" type="button" value="Ajouter un abonnement" onclick="ajouterAbonnement()">
+            <input id="btnExport" type="button" value="Exporter mes abonnements" onclick="exporter()" /><br>
             <a class="nav" href="">Afficher tous les articles</a>
         </div>
         <div id="output">
@@ -28,10 +29,20 @@
     </div>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+<script src="FileSaver.js" type="text/javascript"></script>
 <script src="util.js" type="text/javascript"></script>
 <script type="text/javascript">
     var activeRequests = [];
     xmlDoc = "";
+
+    //exporter le fichier d'abonnemetns
+    function exporter() {
+        var string = (new XMLSerializer()).serializeToString(xmlDoc);
+        var blob = new Blob(["<?xml version='1.0' encoding='UTF-8'?>\n"+string], {
+            type: "text/plain;charset=utf-8;",
+        });
+        saveAs(blob, "subscriptions.xml");
+    }
 
     //ajoute un abonnement dans le storage local et affiche ses articles
     function ajouterAbonnement(){
