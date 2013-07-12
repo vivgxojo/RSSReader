@@ -111,8 +111,9 @@
                 else {
                     newXmlDoc = $.parseXML(contents);
                     newOutlines = newXmlDoc.getElementsByTagName('outline');
-                    for(i=0;i<newOutlines.length;i++){
-                        xmlDoc.getElementsByTagName('body')[0].appendChild(newOutlines[i]);
+                    count = newOutlines.length;
+                    for (i = 0; i < count; i++) {
+                        xmlDoc.getElementsByTagName('body')[0].appendChild(newOutlines[0]);
                     }
                 }
                 localStorage.setItem("abonnements", new XMLSerializer().serializeToString(xmlDoc));
@@ -158,24 +159,26 @@
           }
         );
 
-        //supprime un abonnement 
-        $('.supp').click(function (e) {
+        //supprime un abonnement
+          $('.supp').click(function (e) {
               var r = confirm("Voulez vous vraiment supprimer cet abonnement?");
               if (r == true) {
-                 url = $(this).next().attr('href');
+                  url = $(this).next().attr('href');
                   //ôter l'abonnement
                   outlines = xmlDoc.getElementsByTagName('outline');
                   //alert(outlines[0].getAttribute('xmlUrl'));
                   for (i = 0; i < outlines.length; i++) {
                       //alert(line);
-                      if (url.indexOf(outlines[i].getAttribute('xmlUrl')) !== -1)
+                      if (url.indexOf(outlines[i].getAttribute('xmlUrl')) !== -1) {
                           outlines[i].parentNode.removeChild(outlines[i]);
+                          break;
+                      }
                   }
                   loadOPMLDoc(xmlDoc);
                   localStorage.setItem("abonnements", new XMLSerializer().serializeToString(xmlDoc));
               }
               e.preventDefault();
-        });
+          });
 
         //affiche le contenu d'un dossier
         $('.folderContent').hide();
