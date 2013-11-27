@@ -217,10 +217,8 @@
         content = '<?xml version="1.0" encoding="utf-8"?>\n<rss version="2.0">\n';
         cancelRequests(activeRequests);
         nbActiveRequest = 0;
-        output = document.getElementById("output");
-        links = output.getElementsByTagName('a');
         cancelled = false;
-        $(links).each(function () {
+        $("#output a.feedTitle").each(function () {
             loadFeedContent($(this).attr('href'));
         });
     }
