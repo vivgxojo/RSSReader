@@ -86,7 +86,7 @@
             $("#mainContent").load($(this).attr('href'));
         }
         else {
-            loadALL();
+            //loadALL();
         }
         e.preventDefault();
     });
@@ -102,7 +102,13 @@
         
     }
     loadOPMLDoc(xmlDoc);
-    loadALL();
+
+    function loadFirst() {
+        var firstFeed = $("#output a.feedTitle").first().attr('href');
+        loadOneFeedContent(firstFeed);
+    }
+
+    loadFirst();
 
     //lit un nouveau fichier d'abonnements importé
     function readSingleFile(evt) {
@@ -129,7 +135,7 @@
                 }
                 localStorage.setItem("abonnements", new XMLSerializer().serializeToString(xmlDoc));
                 loadOPMLDoc(xmlDoc);
-                loadALL();
+                loadFirst();
             }
             r.readAsText(f);
         }
